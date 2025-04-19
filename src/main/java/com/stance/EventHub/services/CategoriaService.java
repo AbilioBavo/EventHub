@@ -14,21 +14,18 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    // Buscar todas as categorias
+    public List<Categoria> listarCategorias() {
+        return categoriaRepository.findAll();
+    }
+
+    // Buscar categoria por ID
     public Optional<Categoria> buscarCategoriaPorId(Long id) {
         return categoriaRepository.findById(id);
     }
-    public Categoria salvarCategoria(Categoria categoria) {
-        return categoriaRepository.save(categoria);
-    }
-    public void deletarCategoria(Long id) {
-        categoriaRepository.deleteById(id);
-    }
-    public Categoria atualizarCategoria(Long id, Categoria categoriaAtualizada) {
-        Categoria categoriaExistente = buscarCategoriaPorId(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-        categoriaExistente.setNome(categoriaAtualizada.getNome());
-        return categoriaRepository.save(categoriaExistente);
-    }
-    public List<Categoria> buscarTodasCategorias() {
-        return categoriaRepository.findAll();
+
+    // Buscar categorias por nome exato
+    public List<Categoria> buscarCategoriasPorNome(String nome) {
+        return categoriaRepository.findByNome(nome);
     }
 }

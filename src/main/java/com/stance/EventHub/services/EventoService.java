@@ -59,6 +59,11 @@ public class EventoService {
         return eventoRepository.findByIsFreeFalse();
     }
 
+     // Buscar eventos por categoria ID
+     public List<Evento> buscarEventosPorCategoria(Long categoriaId) {
+        return eventoRepository.findByCategoriaId(categoriaId);
+    }
+
     public List<Evento> listarEventosPorOrganizador(Long organizadorId) {
         return eventoRepository.findByOrganizadorId(organizadorId);
     }
