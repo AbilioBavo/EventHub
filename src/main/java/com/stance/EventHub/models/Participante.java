@@ -11,31 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_participantes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Participante{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String senha;
-
-    @Column(nullable = false)
-    private String morada;
-
-    @Column(nullable = false)
-    private String telefone;
+@DiscriminatorValue("Participante")
+public class Participante extends Utilizador {
 
     @Column(nullable = false)
     private String dataNascimento;
