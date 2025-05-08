@@ -8,6 +8,7 @@ import com.stance.EventHub.services.ParticipanteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,29 +21,32 @@ public class ParticipanteController {
     @Autowired
     private ParticipanteService participanteService;
 
-    @PostMapping
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/registrar")
     public ResponseEntity<ParticipanteDto> criarParticipante(@RequestBody CriarParticipanteDto participanteDto) {
         Participante participante = new Participante();
         participante.setNome(participanteDto.nome());
         participante.setEmail(participanteDto.email());
-        participante.setSenha(participanteDto.senha());
+        participante.setSenha(passwordEncoder.encode(participanteDto.senha())); // Encripta a senha
         participante.setMorada(participanteDto.morada());
         participante.setTelefone(participanteDto.telefone());
         participante.setDataNascimento(participanteDto.dataNascimento());
-    
+
         // Salvar o participante com os interesses
         Participante participanteSalvo = participanteService.salvarParticipante(participante, participanteDto.interesses());
-    
+
         // Criar o DTO de resposta
         ParticipanteDto responseDto = new ParticipanteDto(participanteSalvo);
-    
+
         return ResponseEntity.created(
                 URI.create("/api/participantes/" + participanteSalvo.getId())
         ).body(responseDto);
     }
 
     // Buscar todos os participantees
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<ParticipanteMinDto>> listarParticipantes() {
         List<ParticipanteMinDto> participantesMinDto = participanteService.listarParticipantes()
                 .stream()
@@ -52,7 +56,7 @@ public class ParticipanteController {
     }
 
     // Buscar participante por ID
-    @GetMapping("/{id}")
+    @GetMapping("/perfil/{id}")
     public ResponseEntity<ParticipanteDto> buscarparticipantePorId(@PathVariable Long id) {
         Participante participante = participanteService.buscarParticipantePorId(id)
                 .orElseThrow(() -> new RuntimeException("Participante not found with id: " + id));
@@ -61,7 +65,7 @@ public class ParticipanteController {
     }
 
     // Deletar organizador por ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletarParticcipante(@PathVariable Long id) {
         participanteService.deletarParticipante(id);
         return ResponseEntity.noContent().build();

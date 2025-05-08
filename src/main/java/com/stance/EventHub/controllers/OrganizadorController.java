@@ -6,6 +6,7 @@ import com.stance.EventHub.models.Organizador;
 import com.stance.EventHub.services.OrganizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -18,13 +19,15 @@ public class OrganizadorController {
     @Autowired
     private OrganizadorService organizadorService;
 
-    // Criar ou atualizar um organizador
-    @PostMapping
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/criar")
     public ResponseEntity<OrganizadorDto> criarOrganizador(@RequestBody CriarOrganizadorDto organizadorDto) {
         Organizador organizador = new Organizador();
         organizador.setNome(organizadorDto.nome());
         organizador.setEmail(organizadorDto.email());
-        organizador.setSenha(organizadorDto.senha());
+        organizador.setSenha(passwordEncoder.encode(organizadorDto.senha()));
         organizador.setMorada(organizadorDto.morada());
         organizador.setTelefone(organizadorDto.telefone());
 

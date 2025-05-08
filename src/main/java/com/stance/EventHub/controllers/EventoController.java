@@ -32,7 +32,7 @@ public class EventoController {
     private OrganizadorService organizadorService;
 
     // Criar ou atualizar um evento
-    @PostMapping
+    @PostMapping("/criar")
     public ResponseEntity<EventoDto> criarEvento(@RequestBody CriarEventoDto dto) {
         Categoria categoria = categoriaService.buscarCategoriaPorId(dto.categoriaId())
                 .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada"));
@@ -72,7 +72,7 @@ public class EventoController {
     } 
 
     // Buscar todos os eventos
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<EventoMinDto>> listarEventos() {
         List<Evento> eventos = eventoService.listarEventos();
         List<EventoMinDto> responseDtos = eventos.stream()
@@ -91,7 +91,7 @@ public class EventoController {
     }
 
     // Deletar evento por ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletarEvento(@PathVariable Long id) {
         eventoService.deletarEvento(id);
         return ResponseEntity.noContent().build();
