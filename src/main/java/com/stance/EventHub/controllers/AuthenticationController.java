@@ -25,12 +25,16 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody @Validated AuthenticationDto data){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Validated AuthenticationDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((Utilizador) auth.getPrincipal());
-
-        return ResponseEntity.ok(new LoginResponseDto(token));
+    
+        var utilizador = (Utilizador) auth.getPrincipal();
+        var token = tokenService.generateToken(utilizador);
+        var userType = utilizador.getClass().getSimpleName(); // Obtém o tipo de utilizador (Organizador ou Participante)
+        String nome = utilizador.getNome(); // Obtém o nome do utilizador (se necessário)
+        Long id = utilizador.getId(); // Obtém o ID do utilizador (se necessário)
+        
+        return ResponseEntity.ok(new LoginResponseDto(token, userType, nome, id));
     }
 }

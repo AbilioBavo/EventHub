@@ -23,7 +23,7 @@ public class CategoriaController {
     private EventoService eventoService;
 
     // Listar todas as categorias
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Categoria>> listarCategorias() {
         List<Categoria> categorias = categoriaService.listarCategorias();
         return ResponseEntity.ok(categorias);
