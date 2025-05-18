@@ -41,7 +41,7 @@ public class OrganizadorController {
     }
 
     // Buscar todos os organizadores
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<OrganizadorDto>> listarOrganizadores() {
         List<OrganizadorDto> organizadoresDto = organizadorService.listarOrganizadores()
                 .stream()

@@ -16,11 +16,11 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) throws Exception {
-        return httpSecurity
+        return httpSecurity.cors().and()
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sessão sem estado
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/api/eventos/", "/api/eventos/{id}", "/api/eventos/pagos", "/api/eventos/gratuitos", "/api/participantes/registrar", "/api/organizadores/criar", "/api/categorias/", "/api/categorias/${id}/eventos").permitAll() 
+                        .requestMatchers("/auth/login", "/api/eventos/", "/api/eventos/{id}", "/api/eventos/pagos", "/api/eventos/gratuitos", "/api/participantes/registrar", "/api/organizadores/criar", "/api/categorias/", "/api/categorias/{id}/eventos", "/api/organizadores/").permitAll() 
                         .requestMatchers("/api/eventos/criar", "/api/eventos/delete/{id}", "/api/eventos/organizador/{id}").hasAuthority("Organizador") 
                         .requestMatchers("/api/participantes/perfil/{id}").hasAuthority("Participante") 
                         .anyRequest().authenticated() 
